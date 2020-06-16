@@ -12,7 +12,9 @@ Time tracker and reporting tool. Simple project to explore features in dotnet co
 ## Backend
 
 - AspNetCore API
-- Logging
+- EF Core
+- MiniProfiler for DotNet
+- Logging (Serilog and Seq)
 - HealthChecks
 - Mediator CQRS
 - Middleware error handling
@@ -50,3 +52,11 @@ https://docs.microsoft.com/en-us/ef/core/modeling/entity-properties?tabs=data-an
 EF migrations setup commands
 
 https://docs.microsoft.com/en-us/ef/core/get-started/?tabs=netcore-cli#create-the-database
+
+Logging in AspNetCore + EF Core + Serilog has some gotchas ... must set MS level to Debug if you want to see output.
+
+### MiniProfiler for DotNet Core
+
+https://miniprofiler.com/dotnet/AspDotNetCore
+
+/profiler/results

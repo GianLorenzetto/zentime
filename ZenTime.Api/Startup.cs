@@ -27,6 +27,14 @@ namespace ZenTime.Api
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddScoped<IDateTimeOffsetProvider, DateTimeOffsetProvider>();
+
+            if (_webHostEnvironment.IsLocal())
+            {
+                services.AddMemoryCache();
+                services
+                    .AddMiniProfiler(options => options.RouteBasePath = "/profiler")
+                    .AddEntityFramework();
+            }
             
             services.AddControllers();
             services.AddDbContext<ZenTimeDbContext>(builder =>
@@ -44,6 +52,11 @@ namespace ZenTime.Api
                 app.UseDeveloperExceptionPage();
             }
 
+            if (env.IsLocal())
+            {
+                app.UseMiniProfiler();
+            }
+            
             app.UseSerilogRequestLogging();
             app.UseHttpsRedirection();
             app.UseRouting();
