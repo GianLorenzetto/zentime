@@ -6,6 +6,9 @@
 # macOS meta data
 .DS_Store
 
+# Template appsettings
+appsettings.Local.json
+
 # User-specific files
 *.rsuser
 *.suo
