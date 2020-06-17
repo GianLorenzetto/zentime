@@ -60,3 +60,11 @@ Logging in AspNetCore + EF Core + Serilog has some gotchas ... must set MS level
 https://miniprofiler.com/dotnet/AspDotNetCore
 
 /profiler/results
+
+You may also need
+
+```c#
+services.AddMemoryCache();
+```
+
+For the in memory profiling results.
