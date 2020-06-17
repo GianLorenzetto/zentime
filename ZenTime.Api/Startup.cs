@@ -28,14 +28,6 @@ namespace ZenTime.Api
         {
             services.AddScoped<IDateTimeOffsetProvider, DateTimeOffsetProvider>();
 
-            if (_webHostEnvironment.IsLocal())
-            {
-                services.AddMemoryCache();
-                services
-                    .AddMiniProfiler(options => options.RouteBasePath = "/profiler")
-                    .AddEntityFramework();
-            }
-            
             services.AddControllers();
             services.AddDbContext<ZenTimeDbContext>(builder =>
             {
@@ -43,6 +35,14 @@ namespace ZenTime.Api
                     .EnableSensitiveDataLogging(_webHostEnvironment.IsLocal())
                     .UseSqlServer(Configuration.GetConnectionString("ZenTimeDatabase"));
             });
+            
+            if (_webHostEnvironment.IsLocal())
+            {
+                services.AddMemoryCache();
+                services
+                    .AddMiniProfiler(options => options.RouteBasePath = "/profiler")
+                    .AddEntityFramework();
+            }
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env, ILoggerFactory loggerFactory)
@@ -56,7 +56,7 @@ namespace ZenTime.Api
             {
                 app.UseMiniProfiler();
             }
-            
+
             app.UseSerilogRequestLogging();
             app.UseHttpsRedirection();
             app.UseRouting();

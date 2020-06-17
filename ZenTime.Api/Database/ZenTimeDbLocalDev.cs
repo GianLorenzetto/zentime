@@ -4,9 +4,10 @@ using ZenTime.Api.Database.Entities;
 
 namespace ZenTime.Api.Database
 {
-    public static class ZenTimeDbInitialiser
+    public static class ZenTimeDbLocalDev
+    
     {
-        public static void Initialise(ZenTimeDbContext context)
+        public static void InsertSeedData(ZenTimeDbContext context)
         {
             var tpId = -1;
             

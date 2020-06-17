@@ -77,7 +77,7 @@ namespace ZenTime.Api
                 context.Database.Migrate();
                 
                 Log.Warning(" +++ Seeding database with LOCAL data +++");
-                ZenTimeDbInitialiser.Initialise(context);
+                ZenTimeDbLocalDev.InsertSeedData(context);
             }
             catch (Exception ex)
             {
