@@ -6,9 +6,9 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Serilog;
-using ZenTime.Api.Database;
+using ZenTime.Api.Domain.TimeSheets;
 using ZenTime.Api.Extensions;
-using ZenTime.Api.Services;
+using ZenTime.Database;
 
 namespace ZenTime.Api
 {
@@ -27,7 +27,8 @@ namespace ZenTime.Api
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddScoped<IDateTimeOffsetProvider, DateTimeOffsetProvider>();
-
+            services.AddScoped<ITimeSheetService, TimeSheetService>();
+            
             services.AddControllers();
             services.AddDbContext<ZenTimeDbContext>(builder =>
             {

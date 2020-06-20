@@ -13,6 +13,7 @@ Time tracker and reporting tool. Simple project to explore features in dotnet co
 
 - AspNetCore API
 - EF Core
+- DbUP (Database migrations)
 - MiniProfiler for DotNet
 - Logging (Serilog and Seq)
 - HealthChecks
@@ -23,6 +24,16 @@ Time tracker and reporting tool. Simple project to explore features in dotnet co
 ### AspNetCore API
 
 https://docs.microsoft.com/en-us/aspnet/core/web-api/?view=aspnetcore-3.1
+
+ControllerBase vs Controller
+
+https://docs.microsoft.com/en-us/aspnet/core/web-api/?view=aspnetcore-3.1#controllerbase-class
+
+FTA ^ CreatedAt action response
+
+```c#
+return CreatedAtAction(nameof(GetById), new { id = pet.Id }, pet);
+```
 
 Automatic Problem Details compatibility for 400 responses -
 
@@ -54,6 +65,22 @@ EF migrations setup commands
 https://docs.microsoft.com/en-us/ef/core/get-started/?tabs=netcore-cli#create-the-database
 
 Logging in AspNetCore + EF Core + Serilog has some gotchas ... must set MS level to Debug if you want to see output.
+
+One way to do automatic auditing (check out Shadow Parameters as well)
+
+https://www.ryansouthgate.com/2019/03/18/ef-core-databse-auditing/
+
+Alternative
+
+If you're not sold on EF Core, then there is always Dapper. Combined with DbUp for migrations, you can build a very flexible, tailored solution (albeit more complex) solution.
+
+https://dapper-tutorial.net/dapper
+
+### Database Migrations (DbUp)
+
+https://dbup.github.io/
+
+Command line parsing, incremental and seed scripts, DB drop and create for local dev
 
 ### MiniProfiler for DotNet Core
 

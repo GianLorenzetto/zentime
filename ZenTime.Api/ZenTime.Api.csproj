@@ -34,7 +34,12 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Migrations" />
+    <Folder Include="Features\Reports" />
+    <Folder Include="Services" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\ZenTime.Database\ZenTime.Database.csproj" />
   </ItemGroup>
 
 
