@@ -36,6 +36,25 @@ namespace ZenTime.Api
                     .EnableSensitiveDataLogging(_webHostEnvironment.IsLocal())
                     .UseSqlServer(Configuration.GetConnectionString("ZenTimeDatabase"));
             });
+
+            services.AddSwaggerDocument(settings =>
+            {
+                var envName = _webHostEnvironment.EnvironmentName.ToLower();
+                settings.PostProcess = document =>
+                {
+                    document.Info.Version = envName;
+                    document.Info.Title = "ZenTime API";
+                    document.Info.Description = $"ZenTime API - {envName}";
+                    document.Info.TermsOfService = "None";
+                    document.Info.Contact = new NSwag.OpenApiContact
+                    {
+                        Name = "Gian Lorenzetto",
+                        Email = "",
+                        Url = "https://gianlorenzetto.net"
+                    };
+                };
+
+            });
             
             if (_webHostEnvironment.IsLocal())
             {
@@ -59,6 +78,8 @@ namespace ZenTime.Api
             }
 
             app.UseSerilogRequestLogging();
+            app.UseOpenApi();
+            app.UseSwaggerUi3();
             app.UseHttpsRedirection();
             app.UseRouting();
             app.UseAuthorization();

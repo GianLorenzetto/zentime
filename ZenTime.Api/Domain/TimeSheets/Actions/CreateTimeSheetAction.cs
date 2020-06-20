@@ -8,6 +8,6 @@ namespace ZenTime.Api.Domain.TimeSheets.Actions
         public int ActivityId { get; set; }
         public int DurationInMins { get; set; }
         public DateTimeOffset StartedAt { get; set; }
-        public string? Details { get; set; }
+        public string Details { get; set; }
     }
 }

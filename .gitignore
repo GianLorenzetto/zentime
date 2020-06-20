@@ -6,6 +6,9 @@
 # macOS meta data
 .DS_Store
 
+# Auto-generated swagger.json
+/ZenTime.Api/OpenApi/swagger.json
+
 # Template appsettings
 appsettings.Local.json
 

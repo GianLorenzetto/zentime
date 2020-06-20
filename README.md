@@ -39,6 +39,20 @@ Automatic Problem Details compatibility for 400 responses -
 
 https://docs.microsoft.com/en-us/aspnet/core/web-api/?view=aspnetcore-3.1#problem-details-for-error-status-codes
 
+### OpenApi
+
+https://docs.microsoft.com/en-us/aspnet/core/tutorials/web-api-help-pages-using-swagger?view=aspnetcore-3.1
+
+OpenAPI (Swagger) and NSwag for generating client libraries
+
+Using NSwag (NSwagGen and NSwag.MSBuild) for the auto-generation of swagger.json (for testing and API contracts).
+
+https://docs.microsoft.com/en-us/aspnet/core/tutorials/getting-started-with-nswag?view=aspnetcore-3.1&tabs=visual-studio
+
+NSwag.MSBuild
+
+https://github.com/RicoSuter/NSwag/wiki/NSwag.MSBuild
+
 ### Logging
 
 - Serilog
