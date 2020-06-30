@@ -36,10 +36,13 @@ namespace ZenTime.Database
         
         public DatabaseUpgradeResult SeedDatabase()
         {
+            // var options = SqlServerDbContextOptionsExtensions.UseSqlServer(new DbContextOptionsBuilder<ZenTimeDbContext>(), _connectionString).Options;
+            // var context = new ZenTimeDbContext(options);
+            // await ZenTimeDbLocalDev.InsertSeedData(context, new DateTimeOffsetProvider());
             var upgrader = CreateUpgradeBuilder("SeedDataScripts")
                 .JournalTo(new NullJournal())
                 .Build();
-
+            
             return upgrader.PerformUpgrade();
         }
         private UpgradeEngineBuilder CreateUpgradeBuilder(string filter)

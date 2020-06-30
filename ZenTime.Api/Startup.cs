@@ -1,3 +1,4 @@
+using MediatR;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
@@ -6,8 +7,10 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Serilog;
-using ZenTime.Api.Domain.TimeSheets;
 using ZenTime.Api.Extensions;
+using ZenTime.Application.Queries;
+using ZenTime.Application.Services;
+using ZenTime.Common;
 using ZenTime.Database;
 
 namespace ZenTime.Api
@@ -55,6 +58,8 @@ namespace ZenTime.Api
                 };
 
             });
+
+            services.AddMediatR(typeof(GetAllActivities));
             
             if (_webHostEnvironment.IsLocal())
             {
@@ -77,6 +82,7 @@ namespace ZenTime.Api
                 app.UseMiniProfiler();
             }
 
+            app.ConfigureExceptionHandler(loggerFactory.CreateLogger<Startup>());
             app.UseSerilogRequestLogging();
             app.UseOpenApi();
             app.UseSwaggerUi3();

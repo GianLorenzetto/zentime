@@ -2,8 +2,10 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
-using ZenTime.Database.Entity;
+using ZenTime.Common;
 using ZenTime.Database.Extensions;
+using ZenTime.Domain.Common;
+using ZenTime.Domain.TimeSheets;
 
 namespace ZenTime.Database
 {
@@ -11,9 +13,9 @@ namespace ZenTime.Database
     {
         private readonly IDateTimeOffsetProvider _dateTimeOffsetProvider;
         
-        public DbSet<TimeSheetProject> TimeSheetProjects { get; set; }
-        public DbSet<TimeSheetActivity> TimeSheetActivities { get; set; }
-        public DbSet<TimeSheetEntry> TimeSheetEntries { get; set; }
+        public DbSet<Project>? TimeSheetProjects { get; set; }
+        public DbSet<Activity>? TimeSheetActivities { get; set; }
+        public DbSet<TimeSheet>? TimeSheetEntries { get; set; }
 
         public ZenTimeDbContext(DbContextOptions<ZenTimeDbContext> options):
             base(options)

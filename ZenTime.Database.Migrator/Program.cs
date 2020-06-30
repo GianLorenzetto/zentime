@@ -1,8 +1,9 @@
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using CommandLine;
 using Serilog;
 
-namespace ZenTime.Database
+namespace ZenTime.Database.Migrator
 {
     public class Options
     {

@@ -1,9 +1,10 @@
 using System.Net.Mime;
 using System.Threading.Tasks;
+using MediatR;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using ZenTime.Api.Domain.TimeSheets;
-using ZenTime.Api.Domain.TimeSheets.Actions;
+using ZenTime.Application.Commands;
+using ZenTime.Application.Queries;
 
 namespace ZenTime.Api.Features.TimeSheets
 {
@@ -12,49 +13,50 @@ namespace ZenTime.Api.Features.TimeSheets
     [Route("[controller]")]
     public class TimeSheetsController : ControllerBase
     {
-        private readonly ITimeSheetService _timeSheetService;
+        private readonly IMediator _mediator;
 
-        public TimeSheetsController(ITimeSheetService timeSheetService)
+        public TimeSheetsController(IMediator mediator)
         {
-            _timeSheetService = timeSheetService;
+            _mediator = mediator;
         }
         
         [HttpGet]
         [Route("projects")]
-        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(GetAllProjects.Response), StatusCodes.Status200OK)]
         public async Task<IActionResult> GetProjects()
         {
-            var projects = await _timeSheetService.Projects();
-            return Ok(new { Projects = projects });
+            var projects = await _mediator.Send(new GetAllProjects.Query());
+            return Ok(projects);
         }
         
         [HttpGet]
         [Route("activities")]
-        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(GetAllActivities.Response), StatusCodes.Status200OK)]
         public async Task<IActionResult> GetActivities()
         {
-            var activities = await _timeSheetService.Activities();
-            return Ok(new { Activities = activities });
+            var activities = await _mediator.Send(new GetAllActivities.Query());
+            return Ok(activities);
         }
         
         [HttpGet]
         [Route("{id:int}")]
-        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(GetTimeSheetById.Response), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<IActionResult> GetTimeSheetById([FromRoute] int id)
         {
-            var ts = await _timeSheetService.GetTimeSheetById(id);
-            return Ok(new { TimeSheet = ts });
+            var response = await _mediator.Send(new GetTimeSheetById.Query { TimeSheetId = id });
+            return Ok(response);
         }
         
         [HttpPost]
         [Route("")]
-        [ProducesResponseType(StatusCodes.Status201Created)]
+        [Consumes(MediaTypeNames.Application.Json)]
+        [ProducesResponseType(typeof(CreateTimeSheet.Response), StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public IActionResult CreateTimeSheet([FromBody] CreateTimeSheetAction actionRequest)
+        public async Task<IActionResult> CreateTimeSheet([FromBody] CreateTimeSheet.Command request)
         {
-            var id = _timeSheetService.CreateTimeSheet(actionRequest);
-            return CreatedAtRoute(nameof(GetTimeSheetById), id, new { TimeSheetId = id });
+            var response = await _mediator.Send(request);
+            return CreatedAtRoute(nameof(GetTimeSheetById), response.TimeSheetId, response);
         }
     }
 }

@@ -1,8 +1,7 @@
 using System;
-using System.Linq;
 using System.Threading.Tasks;
-using Microsoft.EntityFrameworkCore;
-using ZenTime.Database.Entity;
+using ZenTime.Common;
+using ZenTime.Domain.TimeSheets;
 
 namespace ZenTime.Database
 {
@@ -12,49 +11,24 @@ namespace ZenTime.Database
         private const string AnnualLeaveActivityName = "Leave - Annual";
         private const string LGActivityName = "LG Activities";
         
-        public static async Task InsertSeedData(ZenTimeDbContext context)
+        public static async Task InsertSeedData(ZenTimeDbContext context, IDateTimeOffsetProvider dateTimeOffsetProvider)
         {
-            await CreateTimeSheetProjects(context);
-            await CreateTimeSheetActivities(context);
-            await CreateTimeSheetEntries(context);
-        }
-
-        private static async Task CreateTimeSheetEntries(ZenTimeDbContext context)
-        {
-            if (context.TimeSheetEntries.Any()) return;
-
-            var tpProject = await context.TimeSheetProjects.SingleAsync(p => p.Name == TelstraPurpleProjectName);
-            var alActivity = await context.TimeSheetActivities.SingleAsync(a => a.Name == AnnualLeaveActivityName);
-            var lgActivity = await context.TimeSheetActivities.SingleAsync(a => a.Name == LGActivityName);
+            var service = new TimeSheetService(context);
             
-            context.TimeSheetEntries.AddRange(new[]
-            {
-                new TimeSheetEntry(tpProject, alActivity, 480, DateTimeOffset.UtcNow - TimeSpan.FromDays(1), "Details"),
-                new TimeSheetEntry(tpProject, lgActivity, 30, DateTimeOffset.UtcNow - TimeSpan.FromHours(1),
-                    "Short LG meeting"),
-            });
-            await context.SaveChangesAsync();
-        }
-
-        private static async Task CreateTimeSheetActivities(ZenTimeDbContext context)
-        {
-            if (context.TimeSheetActivities.Any()) return;
-
-            context.TimeSheetActivities.Add(new TimeSheetActivity(AnnualLeaveActivityName));
-            context.TimeSheetActivities.Add(new TimeSheetActivity("Leave - Personal"));
-            context.TimeSheetActivities.Add(new TimeSheetActivity(LGActivityName));
-            context.TimeSheetActivities.Add(new TimeSheetActivity("Consulting"));
-            context.TimeSheetActivities.Add(new TimeSheetActivity("Pre-Sales"));
-            await context.SaveChangesAsync();
-        }
-
-        private static async Task CreateTimeSheetProjects(ZenTimeDbContext context)
-        {
-            if (context.TimeSheetProjects.Any()) return;
+            var pId1 = await service.CreatProject(new Project(TelstraPurpleProjectName));
+            await service.CreatProject(new Project("ACME Pty Ltd"));
             
-            var tpEntry = context.TimeSheetProjects.Add(new TimeSheetProject(TelstraPurpleProjectName));
-            context.TimeSheetProjects.Add(new TimeSheetProject("ACME Pty Ltd"));
-            await context.SaveChangesAsync();
+            var aId1 = await service.CreateActivity(new Activity(AnnualLeaveActivityName));
+            await service.CreateActivity(new Activity("Leave - Personal"));
+            var aId2 = await service.CreateActivity(new Activity(LGActivityName));
+            await service.CreateActivity(new Activity("Consulting"));
+            await service.CreateActivity(new Activity("Pre-Sales"));
+
+            await service.CreateTimeSheet(
+                new TimeSheet(pId1, aId1, 480, dateTimeOffsetProvider.UtcNow - TimeSpan.FromDays(1), "Details 1"));
+            
+            await service.CreateTimeSheet(
+                new TimeSheet(pId1, aId2, 30, dateTimeOffsetProvider.UtcNow - TimeSpan.FromHours(1), "More details "));
         }
     }
 }

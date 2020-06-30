@@ -3,16 +3,16 @@ GO
 SET QUOTED_IDENTIFIER ON
 GO
 
-CREATE TABLE [zt].[TimeSheetEntry]
+CREATE TABLE [zt].[TimeSheet]
 (
     [Id] [int] IDENTITY (1,1) NOT NULL
-        CONSTRAINT [PK_TimeSheetEntry] PRIMARY KEY CLUSTERED ([Id] ASC),
+        CONSTRAINT [PK_TimeSheet] PRIMARY KEY CLUSTERED ([Id] ASC),
 
     [ProjectId] [int] NOT NULL
-        CONSTRAINT FK_TimeSheetEntry_TimeSheetProject FOREIGN KEY (ProjectId) REFERENCES [zt].[TimeSheetProject] (Id),
+        CONSTRAINT FK_TimeSheet_Project FOREIGN KEY (ProjectId) REFERENCES [zt].[Project] (Id),
 
     [ActivityId] [int] NOT NULL
-        CONSTRAINT FK_TimeSheetEntry_TimeSheetActivity FOREIGN KEY (ActivityId) REFERENCES [zt].[TimeSheetActivity] (Id),
+        CONSTRAINT FK_Entry_Activity FOREIGN KEY (ActivityId) REFERENCES [zt].[Activity] (Id),
 
     [Details] [nvarchar](500) NOT NULL,
     [DurationInMinutes] [int] NOT NULL,

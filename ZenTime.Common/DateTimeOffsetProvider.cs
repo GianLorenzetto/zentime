@@ -1,6 +1,6 @@
 using System;
 
-namespace ZenTime.Database
+namespace ZenTime.Common
 {
     public interface IDateTimeOffsetProvider
     {
